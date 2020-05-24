@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context
+      https://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--扫描@controller-->
+    <context:component-scan base-package="com.sms.controller" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--注解驱动-->
+    <mvc:annotation-driven/>
+
+    <mvc:default-servlet-handler/>
+
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--拦截登录-->
+            <!--<mvc:mapping path="/admin/sms/login.do"/>-->
+            <bean class="com.sms.interceptor.SystemInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--删除文件的大小限制，单位是字节-->
+        <property name="maxUploadSize" value="5000000"></property>
+        <!--请求的编码-->
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="internalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+</beans>
